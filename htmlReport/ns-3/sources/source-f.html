@@ -1,0 +1,168 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > GetItemsUseCaseImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">food.delivery.business.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: GetItemsUseCaseImpl (food.delivery.business.impl)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GetItemsUseCaseImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GetItemsUseCaseImpl$$EnhancerBySpringCGLIB$$56ebd840</td>
+  </tr>
+  <tr>
+    <td class="name">GetItemsUseCaseImpl$$EnhancerBySpringCGLIB$$73acd979</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package food.delivery.business.impl;
+&nbsp;
+&nbsp;import food.delivery.business.GetItemsUseCase;
+&nbsp;import food.delivery.business.exception.UnauthorizedDataAccessException;
+&nbsp;import food.delivery.domain.AccessToken;
+&nbsp;import food.delivery.domain.GetAllItemsRequest;
+&nbsp;import food.delivery.domain.GetItemsResponse;
+&nbsp;import food.delivery.domain.Item;
+&nbsp;import food.delivery.persistence.ItemRepository;
+&nbsp;import food.delivery.persistence.RestaurantRepository;
+&nbsp;import food.delivery.persistence.entity.RestaurantEntity;
+&nbsp;import food.delivery.persistence.entity.RoleEnum;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import javax.transaction.Transactional;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;public class GetItemsUseCaseImpl implements GetItemsUseCase {
+&nbsp;    private ItemRepository itemRepository;
+&nbsp;//    private RestaurantRepository restaurantRepository;
+&nbsp;//    private AccessToken requestAccessToken;
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    @Override
+&nbsp;    public GetItemsResponse getItems(final GetAllItemsRequest request) {
+&nbsp;//        Optional&lt;RestaurantEntity&gt; optionalRestaurant = restaurantRepository.findById(request.getRestaurant_id());
+&nbsp;//        if(optionalRestaurant.isPresent()){
+&nbsp;//            RestaurantEntity restaurant = optionalRestaurant.get();
+&nbsp;//
+&nbsp;//            if(!requestAccessToken.hasRole(RoleEnum.ADMIN.name())){
+&nbsp;//                if(requestAccessToken.getUserId() != restaurant.getUser().getId()){
+&nbsp;//                    throw new UnauthorizedDataAccessException(&quot;USER_ID_NOT_FROM_LOGGED_IN_USER&quot;);
+&nbsp;//                }
+&nbsp;//            }
+&nbsp;//        }
+&nbsp;
+&nbsp;        List&lt;Item&gt; items;
+<b class="fc">&nbsp;        if(request.getRestaurant_id() != null){</b>
+<b class="fc">&nbsp;            items = itemRepository.findAllByRestaurant_IdOrderByIdAsc(request.getRestaurant_id()).stream()</b>
+<b class="fc">&nbsp;                    .map(ItemConverter::convert).toList();</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            items = itemRepository.findAll().stream().map(ItemConverter::convert).toList();</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return GetItemsResponse.builder().items(items).build();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-01-13 23:54</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,173 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UpdateItemUseCaseImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">food.delivery.business.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: UpdateItemUseCaseImpl (food.delivery.business.impl)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UpdateItemUseCaseImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8.7%
+  </span>
+  <span class="absValue">
+    (2/23)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">UpdateItemUseCaseImpl$$EnhancerBySpringCGLIB$$ad60a66a</td>
+  </tr>
+  <tr>
+    <td class="name">UpdateItemUseCaseImpl$$EnhancerBySpringCGLIB$$ca21a7a3</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8.7%
+  </span>
+  <span class="absValue">
+    (2/23)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package food.delivery.business.impl;
+&nbsp;
+&nbsp;import food.delivery.business.UpdateItemUseCase;
+&nbsp;import food.delivery.business.exception.UnauthorizedDataAccessException;
+&nbsp;import food.delivery.domain.AccessToken;
+&nbsp;import food.delivery.domain.UpdateItemRequest;
+&nbsp;import food.delivery.persistence.ItemRepository;
+&nbsp;import food.delivery.persistence.RestaurantRepository;
+&nbsp;import food.delivery.persistence.entity.ItemEntity;
+&nbsp;import food.delivery.persistence.entity.RestaurantEntity;
+&nbsp;import food.delivery.persistence.entity.RoleEnum;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import javax.transaction.Transactional;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.Optional;
+&nbsp;
+<b class="fc">&nbsp;@Service</b>
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;public class UpdateItemUseCaseImpl implements UpdateItemUseCase {
+&nbsp;    private ItemRepository itemRepository;
+&nbsp;    private RestaurantRepository restaurantRepository;
+&nbsp;    private AccessToken requestAccessToken;
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    @Override
+&nbsp;    public void updateItem(UpdateItemRequest request) {
+<b class="nc">&nbsp;        //get itemId from frontend</b>
+<b class="nc">&nbsp;        Optional&lt;ItemEntity&gt; itemOptional = itemRepository.findById(request.getId());</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        if(itemOptional.isPresent()){</b>
+<b class="nc">&nbsp;            ItemEntity item = itemOptional.get();</b>
+<b class="nc">&nbsp;            updateFields(request, item);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    private void updateFields(UpdateItemRequest request, ItemEntity item){</b>
+<b class="nc">&nbsp;        item.setId(request.getId());</b>
+<b class="nc">&nbsp;        item.setName(request.getName());</b>
+<b class="nc">&nbsp;        item.setPrice(request.getPrice());</b>
+<b class="nc">&nbsp;        //make restaurant id fixed and not changeable by user in frontend</b>
+<b class="nc">&nbsp;        Optional&lt;RestaurantEntity&gt; restaurantOptional = restaurantRepository.findById(request.getRestaurant_id());</b>
+<b class="nc">&nbsp;        if(restaurantOptional.isPresent()){</b>
+<b class="nc">&nbsp;            RestaurantEntity restaurant = restaurantOptional.get();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            if(!requestAccessToken.hasRole(RoleEnum.ADMIN.name())){</b>
+<b class="nc">&nbsp;                if(!Objects.equals(requestAccessToken.getUserId(), restaurant.getUser().getId())){</b>
+<b class="nc">&nbsp;                    throw new UnauthorizedDataAccessException(&quot;USER_ID_NOT_FROM_LOGGED_IN_USER&quot;);</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            item.setRestaurant(restaurant);</b>
+<b class="nc">&nbsp;            itemRepository.save(item);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-01-13 23:54</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,174 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CreateItemUseCaseImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">food.delivery.business.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: CreateItemUseCaseImpl (food.delivery.business.impl)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CreateItemUseCaseImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8.3%
+  </span>
+  <span class="absValue">
+    (2/24)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CreateItemUseCaseImpl$$EnhancerBySpringCGLIB$$45f714d1</td>
+  </tr>
+  <tr>
+    <td class="name">CreateItemUseCaseImpl$$EnhancerBySpringCGLIB$$62b8160a</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8.3%
+  </span>
+  <span class="absValue">
+    (2/24)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package food.delivery.business.impl;
+&nbsp;
+&nbsp;import food.delivery.business.CreateItemUseCase;
+&nbsp;import food.delivery.business.exception.ItemNameAlreadyExistsException;
+&nbsp;import food.delivery.business.exception.UnauthorizedDataAccessException;
+&nbsp;import food.delivery.domain.AccessToken;
+&nbsp;import food.delivery.domain.CreateItemRequest;
+&nbsp;import food.delivery.domain.CreateItemResponse;
+&nbsp;import food.delivery.persistence.ItemRepository;
+&nbsp;import food.delivery.persistence.RestaurantRepository;
+&nbsp;import food.delivery.persistence.entity.ItemEntity;
+&nbsp;import food.delivery.persistence.entity.RestaurantEntity;
+&nbsp;import food.delivery.persistence.entity.RoleEnum;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import javax.transaction.Transactional;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.Optional;
+&nbsp;
+<b class="fc">&nbsp;@Service</b>
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;public class CreateItemUseCaseImpl implements CreateItemUseCase {
+&nbsp;    private ItemRepository itemRepository;
+&nbsp;    private RestaurantRepository restaurantRepository;
+&nbsp;    private AccessToken requestAccessToken;
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    @Override
+<b class="nc">&nbsp;    public CreateItemResponse createItem(CreateItemRequest request) {</b>
+<b class="nc">&nbsp;        if(itemRepository.findByName(request.getName()) != null){</b>
+<b class="nc">&nbsp;            throw new ItemNameAlreadyExistsException();</b>
+&nbsp;        }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        ItemEntity savedItem = saveNewItem(request);</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        assert savedItem != null;</b>
+<b class="nc">&nbsp;        return CreateItemResponse.builder().itemId(savedItem.getId()).build();</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    private ItemEntity saveNewItem(CreateItemRequest request){</b>
+<b class="nc">&nbsp;        //throw exception here if restaurant doesn&#39;t exist</b>
+<b class="nc">&nbsp;        Optional&lt;RestaurantEntity&gt; restaurantOptional = restaurantRepository.findById(request.getRestaurant_id());</b>
+<b class="nc">&nbsp;        if(restaurantOptional.isPresent()){</b>
+<b class="nc">&nbsp;            RestaurantEntity restaurant = restaurantOptional.get();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            if(!requestAccessToken.hasRole(RoleEnum.ADMIN.name())){</b>
+<b class="nc">&nbsp;                if(!Objects.equals(requestAccessToken.getUserId(), restaurant.getUser().getId())){</b>
+<b class="nc">&nbsp;                    throw new UnauthorizedDataAccessException(&quot;USER_ID_NOT_FROM_LOGGED_IN_USER&quot;);</b>
+&nbsp;                }
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            ItemEntity newItem = ItemEntity.builder().name(request.getName()).price(request.getPrice()).restaurant(restaurant).build();</b>
+<b class="nc">&nbsp;            return itemRepository.save(newItem);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-01-13 23:54</div>
+</div>
+</body>
+</html>

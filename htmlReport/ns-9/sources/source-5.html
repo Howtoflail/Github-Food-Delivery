@@ -1,0 +1,212 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > RestaurantsController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">food.delivery.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: RestaurantsController (food.delivery.controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RestaurantsController</td>
+<td class="coverageStat">
+  <span class="percent">
+    57.1%
+  </span>
+  <span class="absValue">
+    (4/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (8/16)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">RestaurantsController$$EnhancerBySpringCGLIB$$672690e0</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantsController$$EnhancerBySpringCGLIB$$672690e0_2</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantsController$$EnhancerBySpringCGLIB$$672690e0_3</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantsController$$EnhancerBySpringCGLIB$$672690e0_4</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantsController$$EnhancerBySpringCGLIB$$672690e0_5</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantsController$$EnhancerBySpringCGLIB$$672690e0_5$$FastClassBySpringCGLIB$$eec1726c</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantsController$$EnhancerBySpringCGLIB$$672690e0_6</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantsController$$EnhancerBySpringCGLIB$$b6d8834</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantsController$$FastClassBySpringCGLIB$$347a654a</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    57.1%
+  </span>
+  <span class="absValue">
+    (4/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (8/16)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package food.delivery.controller;
+&nbsp;
+&nbsp;import food.delivery.business.*;
+&nbsp;import food.delivery.configuration.security.isauthenticated.IsAuthenticated;
+&nbsp;import food.delivery.domain.*;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import javax.annotation.security.RolesAllowed;
+&nbsp;import javax.validation.Valid;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;@CrossOrigin
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/restaurants&quot;)
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;public class RestaurantsController {
+&nbsp;    private final CreateRestaurantUseCase createRestaurantUseCase;
+&nbsp;    private final GetRestaurantUseCase getRestaurantUseCase;
+&nbsp;    private final GetRestaurantsIfUserOrderedUseCase getRestaurantsIfUserOrderedUseCase;
+&nbsp;    private final GetRestaurantsUseCase getRestaurantsUseCase;
+&nbsp;    private final DeleteRestaurantUseCase deleteRestaurantUseCase;
+&nbsp;    private final UpdateRestaurantUseCase updateRestaurantUseCase;
+&nbsp;
+&nbsp;    @IsAuthenticated
+&nbsp;    @RolesAllowed({&quot;ROLE_USER&quot;, &quot;ROLE_RESTAURANT&quot;, &quot;ROLE_ADMIN&quot;})
+&nbsp;    @GetMapping(&quot;{id}&quot;)
+&nbsp;    public ResponseEntity&lt;Restaurant&gt; getRestaurant(@PathVariable(value = &quot;id&quot;) final Long id){
+<b class="fc">&nbsp;        final Optional&lt;Restaurant&gt; restaurantOptional = getRestaurantUseCase.getRestaurant(id);</b>
+<b class="fc">&nbsp;        if(restaurantOptional.isEmpty()){</b>
+<b class="fc">&nbsp;            return ResponseEntity.notFound().build();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return ResponseEntity.ok().body(restaurantOptional.get());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //ADD TO TEST
+&nbsp;    @IsAuthenticated
+&nbsp;    @RolesAllowed({&quot;ROLE_USER&quot;, &quot;ROLE_ADMIN&quot;})
+&nbsp;    @GetMapping(value = &quot;getRestaurantsFromUser&quot;)
+&nbsp;    public ResponseEntity&lt;GetRestaurantsResponse&gt; getRestaurantIfUserOrdered(@RequestParam(value = &quot;user&quot;, required = true) Long user_id){
+<b class="nc">&nbsp;        GetAllRestaurantsIfUserOrderedRequest request = new GetAllRestaurantsIfUserOrderedRequest();</b>
+<b class="nc">&nbsp;        request.setUser_id(user_id);</b>
+<b class="nc">&nbsp;        return ResponseEntity.ok(getRestaurantsIfUserOrderedUseCase.getRestaurantsIfUserOrdered(request));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @IsAuthenticated
+&nbsp;    @RolesAllowed({&quot;ROLE_USER&quot;, &quot;ROLE_RESTAURANT&quot;, &quot;ROLE_ADMIN&quot;})
+&nbsp;    @GetMapping()
+<b class="fc">&nbsp;    public ResponseEntity&lt;GetRestaurantsResponse&gt; getRestaurants(){ return ResponseEntity.ok(getRestaurantsUseCase.getRestaurants());}</b>
+&nbsp;
+&nbsp;    @PostMapping(value = &quot;/save&quot;)
+&nbsp;    public ResponseEntity&lt;CreateRestaurantResponse&gt; createRestaurant(@RequestBody @Valid CreateRestaurantRequest request){
+<b class="nc">&nbsp;        CreateRestaurantResponse response = createRestaurantUseCase.createRestaurant(request);</b>
+<b class="nc">&nbsp;        return ResponseEntity.status(HttpStatus.CREATED).body(response);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @IsAuthenticated
+&nbsp;    @RolesAllowed({&quot;ROLE_RESTAURANT&quot;, &quot;ROLE_ADMIN&quot;})
+&nbsp;    @DeleteMapping(&quot;{id}&quot;)
+&nbsp;    public ResponseEntity&lt;Void&gt; deleteRestaurant(@PathVariable Long id){
+<b class="fc">&nbsp;        deleteRestaurantUseCase.deleteRestaurant(id);</b>
+<b class="fc">&nbsp;        return ResponseEntity.noContent().build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @IsAuthenticated
+&nbsp;    @RolesAllowed({&quot;ROLE_RESTAURANT&quot;, &quot;ROLE_ADMIN&quot;})
+&nbsp;    @PutMapping(value = &quot;/update/{id}&quot;)
+&nbsp;    public ResponseEntity&lt;Void&gt; updateRestaurant(@PathVariable Long id, @RequestBody @Valid UpdateRestaurantRequest request){
+<b class="nc">&nbsp;        request.setId(id);</b>
+<b class="nc">&nbsp;        updateRestaurantUseCase.updateRestaurant(request);</b>
+<b class="nc">&nbsp;        return ResponseEntity.noContent().build();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-01-13 23:54</div>
+</div>
+</body>
+</html>

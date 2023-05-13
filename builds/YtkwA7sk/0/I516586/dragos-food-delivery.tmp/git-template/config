@@ -1,0 +1,6 @@
+[init]
+	defaultBranch = none
+[fetch]
+	recurseSubmodules = false
+[http "https://git.fhict.nl"]
+	sslCAInfo = C:\\Github_Repos\\dragos-food-delivery\\builds\\YtkwA7sk\\0\\I516586\\dragos-food-delivery.tmp\\CI_SERVER_TLS_CA_FILE

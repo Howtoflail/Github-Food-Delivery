@@ -1,0 +1,217 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > RestCustomExceptionHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">food.delivery.configuration.exceptionhandler</a>
+</div>
+
+<h1>Coverage Summary for Class: RestCustomExceptionHandler (food.delivery.configuration.exceptionhandler)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RestCustomExceptionHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (6/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (14/28)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">RestCustomExceptionHandler$ValidationErrorDTO</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    63.6%
+  </span>
+  <span class="absValue">
+    (7/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    51.7%
+  </span>
+  <span class="absValue">
+    (15/29)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package food.delivery.configuration.exceptionhandler;
+&nbsp;
+&nbsp;import lombok.extern.slf4j.Slf4j;
+&nbsp;import org.springframework.http.HttpHeaders;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.util.CollectionUtils;
+&nbsp;import org.springframework.validation.BindingResult;
+&nbsp;import org.springframework.validation.FieldError;
+&nbsp;import org.springframework.web.bind.MethodArgumentNotValidException;
+&nbsp;import org.springframework.web.bind.annotation.ControllerAdvice;
+&nbsp;import org.springframework.web.bind.annotation.ExceptionHandler;
+&nbsp;import org.springframework.web.context.request.WebRequest;
+&nbsp;import org.springframework.web.server.ResponseStatusException;
+&nbsp;import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+&nbsp;
+&nbsp;import javax.validation.ConstraintViolationException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@ControllerAdvice
+<b class="fc">&nbsp;@Slf4j</b>
+<b class="fc">&nbsp;public class RestCustomExceptionHandler extends ResponseEntityExceptionHandler {</b>
+&nbsp;    private static final String INTERNAL_SERVER_ERROR_MESSAGE = &quot;Internal server error.&quot;;
+&nbsp;    private static final String ERROR_LOG_FIELD = &quot;error&quot;;
+&nbsp;    private static final String STATUS_LOG_FIELD = &quot;status&quot;;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected ResponseEntity&lt;Object&gt; handleMethodArgumentNotValid(final MethodArgumentNotValidException error, final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
+<b class="fc">&nbsp;        log.error(&quot;MethodArgumentNotValidException with status {} occurred {}&quot;, HttpStatus.BAD_REQUEST, error);</b>
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(convertToResponseBody(error));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ExceptionHandler(value = {ConstraintViolationException.class})
+&nbsp;    public ResponseEntity&lt;Object&gt; handleConstraintViolationException(final ConstraintViolationException error) {
+<b class="nc">&nbsp;        log.error(&quot;ConstraintViolationException with status {} occurred {}&quot;, HttpStatus.BAD_REQUEST, error);</b>
+<b class="nc">&nbsp;        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(convertToResponseBody(error));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ExceptionHandler(value = {ResponseStatusException.class})
+&nbsp;    public ResponseEntity&lt;Object&gt; handleResponseStatusException(final ResponseStatusException error) {
+<b class="nc">&nbsp;        log.error(&quot;ResponseStatusException with status {} occurred {}&quot;, error.getStatus(), error);</b>
+<b class="nc">&nbsp;        return ResponseEntity.status(error.getStatus()).body(error.getReason());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ExceptionHandler(value = {RuntimeException.class})
+&nbsp;    public ResponseEntity&lt;Object&gt; handleUnknownRuntimeError(final RuntimeException error) {
+<b class="fc">&nbsp;        log.error(&quot;Internal server error occurred {}&quot;, error);</b>
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(INTERNAL_SERVER_ERROR_MESSAGE);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;ValidationErrorDTO&gt; convertToResponseBody(final MethodArgumentNotValidException error) {
+<b class="fc">&nbsp;        final BindingResult bindingResult = error.getBindingResult();</b>
+<b class="fc">&nbsp;        final List&lt;ValidationErrorDTO&gt; result = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        if (bindingResult.hasErrors()) {</b>
+<b class="fc">&nbsp;            bindingResult.getAllErrors()</b>
+<b class="fc">&nbsp;                    .forEach(validationError -&gt; {</b>
+<b class="fc">&nbsp;                        if (validationError instanceof final FieldError fieldError) {</b>
+<b class="fc">&nbsp;                            result.add(new ValidationErrorDTO(fieldError.getField(), fieldError.getDefaultMessage()));</b>
+&nbsp;                        } else {
+<b class="nc">&nbsp;                            result.add(new ValidationErrorDTO(validationError.getObjectName(), validationError.getDefaultMessage()));</b>
+&nbsp;                        }
+&nbsp;                    });
+&nbsp;        } else {
+<b class="nc">&nbsp;            log.warn(&quot;MethodArgumentNotValidException without binding result errors {}&quot;, error);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return result;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;ValidationErrorDTO&gt; convertToResponseBody(final ConstraintViolationException error) {
+<b class="nc">&nbsp;        if (CollectionUtils.isEmpty(error.getConstraintViolations())) {</b>
+<b class="nc">&nbsp;            log.warn(&quot;Empty constraints violation for error: {}&quot;, error.getMessage());</b>
+<b class="nc">&nbsp;            return Collections.emptyList();</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        final List&lt;ValidationErrorDTO&gt; result = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        error.getConstraintViolations().forEach(constraintViolation -&gt; {</b>
+<b class="nc">&nbsp;                    final String field = constraintViolation.getPropertyPath() != null ? constraintViolation.getPropertyPath().toString() : &quot;unknown field&quot;;</b>
+<b class="nc">&nbsp;                    result.add(new ValidationErrorDTO(field, constraintViolation.getMessage()));</b>
+&nbsp;                }
+&nbsp;        );
+<b class="nc">&nbsp;        return result;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private record ValidationErrorDTO(String field, String error) {</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-01-13 23:54</div>
+</div>
+</body>
+</html>

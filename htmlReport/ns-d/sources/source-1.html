@@ -1,0 +1,106 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > RestaurantRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">food.delivery.persistence</a>
+</div>
+
+<h1>Coverage Summary for Class: RestaurantRepository (food.delivery.persistence)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">RestaurantRepository$MockitoMock$aTVozq7l</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantRepository$MockitoMock$aTVozq7l$auxiliary$1mpRiTOy</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantRepository$MockitoMock$aTVozq7l$auxiliary$3cRmgM4k</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantRepository$MockitoMock$aTVozq7l$auxiliary$qJbydhyh</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantRepository$MockitoMock$L4yUwHYr</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantRepository$MockitoMock$L4yUwHYr$auxiliary$9aA5J6iG</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantRepository$MockitoMock$L4yUwHYr$auxiliary$MdPl1ZfG</td>
+  </tr>
+  <tr>
+    <td class="name">RestaurantRepository$MockitoMock$L4yUwHYr$auxiliary$Uo2gUiSE</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package food.delivery.persistence;
+&nbsp;
+&nbsp;import food.delivery.persistence.entity.RestaurantEntity;
+&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+&nbsp;import org.springframework.data.jpa.repository.Query;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public interface RestaurantRepository extends JpaRepository&lt;RestaurantEntity, Long&gt; {
+&nbsp;    String findByName(String name);
+&nbsp;
+&nbsp;    @Query(value = &quot;SELECT * FROM restaurants WHERE restaurants.id IN &quot; +
+&nbsp;            &quot;(SELECT restaurants.id FROM orders WHERE restaurants.id = orders.restaurant_id AND orders.user_id = ?1)&quot;, nativeQuery = true)
+&nbsp;    List&lt;RestaurantEntity&gt; getRestaurantIfUserOrdered(Long userId);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-01-13 23:54</div>
+</div>
+</body>
+</html>

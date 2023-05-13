@@ -1,0 +1,212 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > OrderItemsController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">food.delivery.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: OrderItemsController (food.delivery.controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">OrderItemsController</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (10/15)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">OrderItemsController$$EnhancerBySpringCGLIB$$6322fdc4</td>
+  </tr>
+  <tr>
+    <td class="name">OrderItemsController$$EnhancerBySpringCGLIB$$6322fdc4_2</td>
+  </tr>
+  <tr>
+    <td class="name">OrderItemsController$$EnhancerBySpringCGLIB$$6322fdc4_3</td>
+  </tr>
+  <tr>
+    <td class="name">OrderItemsController$$EnhancerBySpringCGLIB$$6322fdc4_3$$FastClassBySpringCGLIB$$a5fb1c83</td>
+  </tr>
+  <tr>
+    <td class="name">OrderItemsController$$EnhancerBySpringCGLIB$$6322fdc4_4</td>
+  </tr>
+  <tr>
+    <td class="name">OrderItemsController$$EnhancerBySpringCGLIB$$6322fdc4_5</td>
+  </tr>
+  <tr>
+    <td class="name">OrderItemsController$$EnhancerBySpringCGLIB$$6322fdc4_6</td>
+  </tr>
+  <tr>
+    <td class="name">OrderItemsController$$EnhancerBySpringCGLIB$$769f518</td>
+  </tr>
+  <tr>
+    <td class="name">OrderItemsController$$FastClassBySpringCGLIB$$89125f16</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (10/15)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package food.delivery.controller;
+&nbsp;
+&nbsp;import food.delivery.business.CreateOrderItemUseCase;
+&nbsp;import food.delivery.business.DeleteOrderItemUseCase;
+&nbsp;import food.delivery.business.GetOrderItemUseCase;
+&nbsp;import food.delivery.business.GetOrderItemsUseCase;
+&nbsp;import food.delivery.business.impl.GetOrderItemsIfUserOrderedUseCaseImpl;
+&nbsp;import food.delivery.configuration.security.isauthenticated.IsAuthenticated;
+&nbsp;import food.delivery.domain.*;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import javax.annotation.security.RolesAllowed;
+&nbsp;import javax.validation.Valid;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;@CrossOrigin
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/orderitems&quot;)
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;public class OrderItemsController {
+&nbsp;    private GetOrderItemUseCase getOrderItemUseCase;
+&nbsp;    private GetOrderItemsUseCase getOrderItemsUseCase;
+&nbsp;    private GetOrderItemsIfUserOrderedUseCaseImpl getOrderItemsIfUserOrderedUseCase;
+&nbsp;    private CreateOrderItemUseCase createOrderItemUseCase;
+&nbsp;    private DeleteOrderItemUseCase deleteOrderItemUseCase;
+&nbsp;
+&nbsp;    @IsAuthenticated
+&nbsp;    @RolesAllowed({&quot;ROLE_RESTAURANT&quot;, &quot;ROLE_ADMIN&quot;})
+&nbsp;    @GetMapping(&quot;{id}&quot;)
+&nbsp;    public ResponseEntity&lt;OrderItem&gt; getOrderItem(@PathVariable(value = &quot;id&quot;) final Long id) {
+<b class="fc">&nbsp;        final Optional&lt;OrderItem&gt; orderItemOptional = getOrderItemUseCase.getOrderItem(id);</b>
+<b class="fc">&nbsp;        if(orderItemOptional.isEmpty()){</b>
+<b class="fc">&nbsp;            return ResponseEntity.notFound().build();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return ResponseEntity.ok().body(orderItemOptional.get());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @IsAuthenticated
+&nbsp;    @RolesAllowed({&quot;ROLE_RESTAURANT&quot;, &quot;ROLE_ADMIN&quot;})
+&nbsp;    @GetMapping()
+&nbsp;    public ResponseEntity&lt;GetOrderItemsResponse&gt; getOrderItems(@RequestParam(value = &quot;restaurant&quot;, required = true) Long restaurant_id){
+<b class="fc">&nbsp;        GetAllOrderItemsRequest request = new GetAllOrderItemsRequest();</b>
+<b class="fc">&nbsp;        request.setRestaurant_id(restaurant_id);</b>
+<b class="fc">&nbsp;        return ResponseEntity.ok(getOrderItemsUseCase.getOrderItems(request));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @IsAuthenticated
+&nbsp;    @RolesAllowed({&quot;ROLE_USER&quot;, &quot;ROLE_ADMIN&quot;})
+&nbsp;    @GetMapping(value = &quot;/getOrderItemsFromUser&quot;)
+&nbsp;    public ResponseEntity&lt;GetOrderItemsResponse&gt; getOrderItemsIfUserOrdered(@RequestParam(value = &quot;user&quot;, required = true) Long user_id){
+<b class="nc">&nbsp;        GetAllOrderItemsIfUserOrderedRequest request = new GetAllOrderItemsIfUserOrderedRequest();</b>
+<b class="nc">&nbsp;        request.setUser_id(user_id);</b>
+<b class="nc">&nbsp;        return ResponseEntity.ok(getOrderItemsIfUserOrderedUseCase.getOrderItemsIfUserOrdered(request));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //dont allow restaurant to create order item
+&nbsp;    @IsAuthenticated
+&nbsp;    @RolesAllowed({&quot;ROLE_USER&quot;, &quot;ROLE_ADMIN&quot;})
+&nbsp;    @PostMapping(value = &quot;/save&quot;)
+&nbsp;    public ResponseEntity&lt;CreateOrderItemResponse&gt; createOrderItem(@RequestBody @Valid CreateOrderItemRequest request){
+<b class="nc">&nbsp;        CreateOrderItemResponse response = createOrderItemUseCase.createOrderItem(request);</b>
+<b class="nc">&nbsp;        return ResponseEntity.status(HttpStatus.CREATED).body(response);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @IsAuthenticated
+&nbsp;    @RolesAllowed({&quot;ROLE_RESTAURANT&quot;, &quot;ROLE_ADMIN&quot;})
+&nbsp;    @DeleteMapping(&quot;{id}&quot;)
+&nbsp;    public ResponseEntity&lt;Void&gt; deleteOrderItem(@PathVariable Long id){
+<b class="fc">&nbsp;        deleteOrderItemUseCase.deleteOrderItem(id);</b>
+<b class="fc">&nbsp;        return ResponseEntity.noContent().build();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-01-13 23:54</div>
+</div>
+</body>
+</html>

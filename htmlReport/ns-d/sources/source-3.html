@@ -1,0 +1,108 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ItemRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">food.delivery.persistence</a>
+</div>
+
+<h1>Coverage Summary for Class: ItemRepository (food.delivery.persistence)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">ItemRepository$MockitoMock$D3TflcaA</td>
+  </tr>
+  <tr>
+    <td class="name">ItemRepository$MockitoMock$D3TflcaA$auxiliary$9LkDelfw</td>
+  </tr>
+  <tr>
+    <td class="name">ItemRepository$MockitoMock$D3TflcaA$auxiliary$FVPtfowY</td>
+  </tr>
+  <tr>
+    <td class="name">ItemRepository$MockitoMock$D3TflcaA$auxiliary$x9pAdPJU</td>
+  </tr>
+  <tr>
+    <td class="name">ItemRepository$MockitoMock$Q11Hhorc</td>
+  </tr>
+  <tr>
+    <td class="name">ItemRepository$MockitoMock$Q11Hhorc$auxiliary$EmxBDji7</td>
+  </tr>
+  <tr>
+    <td class="name">ItemRepository$MockitoMock$Q11Hhorc$auxiliary$lFlZkZw9</td>
+  </tr>
+  <tr>
+    <td class="name">ItemRepository$MockitoMock$Q11Hhorc$auxiliary$yGPdxxHn</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package food.delivery.persistence;
+&nbsp;
+&nbsp;import food.delivery.persistence.entity.ItemEntity;
+&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+&nbsp;import org.springframework.data.jpa.repository.Query;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public interface ItemRepository extends JpaRepository&lt;ItemEntity, Long&gt; {
+&nbsp;    String findByName(String name);
+&nbsp;    List&lt;ItemEntity&gt; findAllByRestaurant_IdOrderByIdAsc(Long restaurant_id);
+&nbsp;
+&nbsp;    @Query(value = &quot;SELECT * FROM items WHERE items.restaurant_id IN &quot; +
+&nbsp;            &quot;(SELECT items.restaurant_id FROM restaurants WHERE items.restaurant_id = restaurants.id AND restaurants.id IN &quot; +
+&nbsp;            &quot;(SELECT restaurants.id FROM orders WHERE restaurants.id = orders.restaurant_id AND orders.user_id = ?1))&quot;, nativeQuery = true)
+&nbsp;    List&lt;ItemEntity&gt; getAllItemsIfUserOrdered(Long userId);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-01-13 23:54</div>
+</div>
+</body>
+</html>
